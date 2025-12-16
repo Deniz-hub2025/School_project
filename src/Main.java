@@ -70,7 +70,15 @@ public class Main {
     }
 
     public static int totalProfitOnDay(int month, int day) {
-        return 1234;
+        if(month<0||month>11||day<1||day>28){
+            return -9999;
+        }
+        int total=0;
+        for(int i=0;i<commodities.length;i++){
+            total+=profitdata[month][day-1][i];
+
+        }
+        return total;
     }
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
