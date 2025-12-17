@@ -53,41 +53,96 @@ public class Main {
         }
         int bestCommodityIndex = 0;
         int maxProfit = 0;
-        for(int i=0;i<28;i++){
-            maxProfit+=profitdata[month][i][0];
+        for (int i = 0; i < 28; i++) {
+            maxProfit += profitdata[month][i][0];
         }
-        for(int i=1;i<COMMS;i++){
-            int sum=0;
-            for(int a=0;a<28;a++){
-                sum+=profitdata[month][a][i];
+        for (int i = 1; i < COMMS; i++) {
+            int sum = 0;
+            for (int a = 0; a < 28; a++) {
+                sum += profitdata[month][a][i];
             }
-            if (maxProfit<sum){
-                sum=maxProfit;
-                bestCommodityIndex=i;
+            if (maxProfit < sum) {
+                sum = maxProfit;
+                bestCommodityIndex = i;
             }
         }
-        return commodities[bestCommodityIndex] + " "+maxProfit;
+        return commodities[bestCommodityIndex] + " " + maxProfit;
     }
 
     public static int totalProfitOnDay(int month, int day) {
-        if(month<0||month>11||day<1||day>28){
+        if (month < 0 || month > 11 || day < 1 || day > 28) {
             return -9999;
         }
-        int total=0;
-        for(int i=0;i<commodities.length;i++){
-            total+=profitdata[month][day-1][i];
+        int total = 0;
+        for (int i = 0; i < commodities.length; i++) {
+            total += profitdata[month][day - 1][i];
 
         }
         return total;
     }
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
-        return 1234;
+        if (from < 0 || to > 28 || from > to) {
+            return -99999;
+        }
+        int commoditynum;
+        switch (commodity) {
+            case "Gold":
+                commoditynum = 0;
+                break;
+            case "Oil":
+                commoditynum = 1;
+                break;
+            case "Silver":
+                commoditynum = 2;
+                break;
+            case "Wheat":
+                commoditynum = 3;
+                break;
+            case "Copper":
+                commoditynum = 4;
+                break;
+            default:
+                return -99999;
+        }
+        int total = 0;
+        for (int m = 0; m < 12; m++) {
+            for (int i = from - 1; i <= to - 1; i++) {
+                total += profitdata[m][i][commoditynum];
+            }
+
+        }
+        return total;
     }
 
     public static int bestDayOfMonth(int month) {
-        return 1234;
+
+        if (month < 0 || month >= MONTHS) {
+            return -1;
+        }
+        int bestDay = 1;
+        int bestProfit = 0;
+
+        for (int a = 0; a < COMMS; a++) {
+            bestProfit += profitdata[month][0][a];
+        }
+        for (int i = 1; i < DAYS; i++) {
+
+            int sum = 0;
+
+            for (int c = 0; c < COMMS; c++) {
+                sum += profitdata[month][i][c];
+            }
+
+            if (sum > bestProfit) {
+                bestProfit = sum;
+                bestDay = i + 1;
+            }
+        }
+
+        return bestDay;
     }
+
 
     public static String bestMonthForCommodity(String comm) {
         return "DUMMY";
