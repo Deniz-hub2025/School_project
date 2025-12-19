@@ -1,5 +1,6 @@
 // Main.java — Students version
 
+import java.nio.file.*;
 import java.io.*;
 import java.util.*;
 
@@ -15,11 +16,11 @@ public class Main {
     static int[][][] profitdata = new int[MONTHS][DAYS][COMMS];
 
     public static void loadData() {
-
+        Scanner sc = null;
         for (int i = 0; i < MONTHS; i++) {
-            File file = new File("Data_Files/" + months[i] + ".txt");
+
             try {
-                Scanner sc = new Scanner(file);
+                sc = new Scanner(Paths.get("Data_Files/" + months[i] + ".txt"));
                 sc.nextLine();
                 while (sc.hasNextLine()) {
                     String line = sc.nextLine();
@@ -39,8 +40,9 @@ public class Main {
                     }
                 }
                 sc.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("File not here:" + months[i] + ".txt");
+            } catch (IOException e) {
+                System.out.println("File not here: " + months[i] + ".txt");
+
             }
         }
     }
@@ -220,11 +222,67 @@ public class Main {
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
-        return 1234;
+        int c = -1;
+
+
+        for (int i = 0; i < COMMS; i++) {
+            if (commodities[i].equals(comm)) {
+                c = i;
+                break;
+            }
+        }
+
+        if (c == -1) {
+            return -1;
+        }
+
+        int total = 0;
+
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+
+                if (profitdata[m][d][c] > threshold) {
+                    total++;
+                }
+            }
+        }
+
+        return total;
     }
 
+
     public static int biggestDailySwing(int month) {
-        return 1234;
+
+        if (month < 0 || month >= MONTHS) {
+            return -99999;
+        }
+
+        int max = 0;
+
+        for (int d = 0; d < DAYS - 1; d++) {
+
+            int today = 0;
+            int tomorrow = 0;
+
+            for (int c = 0; c < COMMS; c++) {
+                today += profitdata[month][d][c];
+            }
+
+            for (int c = 0; c < COMMS; c++) {
+                tomorrow += profitdata[month][d + 1][c];
+            }
+
+            int fark = today - tomorrow;
+            if (fark < 0) {
+                fark = -fark;
+            }
+
+            if (fark > max) {
+                max = fark;
+            }
+        }
+
+        return max;
     }
 
     public static String compareTwoCommodities(String c1, String c2) {
