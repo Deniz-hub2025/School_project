@@ -119,7 +119,7 @@ public class Main {
 
     public static int bestDayOfMonth(int month) {
 
-        if (month < 0 || month >= MONTHS) {
+        if (month < 0 || month > 11) {
             return -1;
         }
         int bestDay = 1;
@@ -253,7 +253,7 @@ public class Main {
 
     public static int biggestDailySwing(int month) {
 
-        if (month < 0 || month >= MONTHS) {
+        if (month < 0 || month >11 ) {
             return -99999;
         }
 
@@ -286,11 +286,79 @@ public class Main {
     }
 
     public static String compareTwoCommodities(String c1, String c2) {
-        return "DUMMY is better by 1234";
-    }
+            int a = -1;
+            int b = -1;
 
-    public static String bestWeekOfMonth(int month) {
-        return "DUMMY";
+            for (int i = 0; i < COMMS; i++) {
+                if (commodities[i].equals(c1)) {
+                    a = i;
+                }
+                if (commodities[i].equals(c2)) {
+                    b = i;
+                }
+            }
+
+            if (a == -1 || b == -1) {
+                return "INVALID_COMMODITY";
+            }
+
+            int t1 = 0;
+            int t2 = 0;
+
+            for (int m = 0; m < MONTHS; m++) {
+                for (int d = 0; d < DAYS; d++) {
+                    t1 += profitdata[m][d][a];
+                    t2 += profitdata[m][d][b];
+                }
+            }
+
+            if (t1 > t2) {
+                return c1 + " is better by " + (t1 - t2);
+            } else if (t2 > t1) {
+                return c2 + " is better by " + (t2 - t1);
+            } else {
+                return "Equal";
+            }
+        }
+
+
+        public static String bestWeekOfMonth(int month) {
+
+            if (month < 0 || month >11) {
+                return "INVALID_MONTH";
+            }
+
+            int total = 0;
+
+            for (int a = 0; a < 7; a++) {
+                for (int b = 0; b < COMMS; b++) {
+                    total += profitdata[month][a][b];
+                }
+            }
+
+            int max = total;
+            int week = 1;
+
+            for (int i = 1; i < 4; i++) {
+
+                total = 0;
+
+                int start = i * 7;
+                int end = start + 7;
+
+                for (int a = start; a < end; a++) {
+                    for (int b = 0; b < COMMS; b++) {
+                        total += profitdata[month][a][b];
+                    }
+                }
+
+                if (total > max) {
+                    max = total;
+                    week = i + 1;
+                }
+            }
+
+            return "Week " + week;
     }
 
     public static void main(String[] args) {
